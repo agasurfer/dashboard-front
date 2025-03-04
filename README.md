@@ -1,2 +1,1 @@
-# dashboard-front
-Training Dashboard Frontend
+# Dashboard Frontend Training
