@@ -6,15 +6,20 @@
   box-sizing: border-box;
 }
 
+li {
+  list-style: none;
+}
+
 a {
   text-decoration: none;
   color: rgb(46, 42, 42);
 }
 
 body {
-  background-color: #eeeeee;
+  background-color: #fffab4;
   color: rgb(32, 31, 31);
   font-family: "Roboto", serif;
+  margin-top: 50px;
 }
 
 img {
@@ -26,10 +31,10 @@ img {
 .container {
   background-color: rgb(255, 255, 255);
   margin: 0 auto;
-  padding: 15px;
+  padding: 30px;
   max-width: 1110px;
-  height: 100vh;
-  border-radius: 40px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
-  ;
+  min-height: 100vh;
+  border-radius: 0px 0px 25px 25px;
+  box-shadow: 1px 0 5px rgba(0, 0, 0, 0.2), -1px 0 5px rgba(0, 0, 0, 0.2);
+  
 }
