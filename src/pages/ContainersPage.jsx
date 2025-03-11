@@ -33,8 +33,8 @@ const ContainersPage = () => {
       <div className="containers-grid">
         {containers.map(container => (
           <Card key={container._id} className="container-card">
-            <CardContent>
-              <h3>{container.name}</h3>
+            <CardContent className="container-card-content">
+              <h3>🧊 {container.name}</h3>
               <p><strong>Image:</strong> {container.image}</p>
               <p><strong>Status:</strong> <Badge variant="outline" className={container.status === 'running' ? 'status-running' : 'status-stopped'}>{container.status}</Badge></p>
               <p><strong>Created At:</strong> {new Date(container.created_at).toLocaleString()}</p>
