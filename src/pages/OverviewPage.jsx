@@ -1,3 +1,4 @@
+
 import { React, useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_URL, USER_ID } from '../config/api.config';
@@ -14,24 +15,31 @@ const OverviewPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [userResponse, containersResponse, bucketsResponse] = await Promise.all([
+        const [userResponse, containersResponse, bucketsResponse, volumesResponse] = await Promise.all([
           axios.get(`${API_URL}/users/${USER_ID}`),
           axios.get(`${API_URL}/users/${USER_ID}/containers`),
           axios.get(`${API_URL}/users/${USER_ID}/buckets`),
+          axios.get(`${API_URL}/users/${USER_ID}/volumes`),
         ]);
 
         setUserData(userResponse.data);
         setServicesData({
           totalContainers: containersResponse.data.length,
           totalBuckets: bucketsResponse.data.length,
+          totalVolumes: volumesResponse.data.length,
         });
 
-        const totalCapacity = bucketsResponse.data.reduce((acc, bucket) => acc + bucket.max_capacity_gb, 0);
-        const currentUsage = bucketsResponse.data.reduce((acc, bucket) => acc + bucket.current_usage_gb, 0);
+        const bucketCapacity = bucketsResponse.data.reduce((acc, bucket) => acc + bucket.max_capacity_gb, 0);
+        const bucketUsage = bucketsResponse.data.reduce((acc, bucket) => acc + bucket.current_usage_gb, 0);
+
+        const volumeCapacity = volumesResponse.data.reduce((acc, volume) => acc + volume.size_gb, 0);
+        const volumeUsage = volumesResponse.data.reduce((acc, volume) => acc + volume.used_gb, 0);
 
         setStorageData({
-          totalCapacity,
-          currentUsage,
+          bucketCapacity,
+          bucketUsage,
+          volumeCapacity,
+          volumeUsage,
         });
       } catch (error) {
         console.error('Loading error:', error);
@@ -71,6 +79,7 @@ const OverviewPage = () => {
             </div>
             <p><strong>Total Containers:</strong> {servicesData.totalContainers}</p>
             <p><strong>Total Buckets:</strong> {servicesData.totalBuckets}</p>
+            <p><strong>Total Volumes:</strong> {servicesData.totalVolumes}</p>
           </CardContent>
         </Card>
 
@@ -80,8 +89,23 @@ const OverviewPage = () => {
               <Database size={24} />
               <h3>Storage Usage</h3>
             </div>
-            <p><strong>Total Capacity:</strong> {storageData.totalCapacity} GB</p>
-            <p><strong>Current Usage:</strong> {storageData.currentUsage.toFixed(2)} GB</p>
+            <p><strong>Object Storage (Buckets):</strong></p>
+            <div className="progress-bar">
+              <div 
+                className="progress-fill progress-bucket" 
+                style={{ width: `${(storageData.bucketUsage / storageData.bucketCapacity) * 100}%` }}>
+              </div>
+            </div>
+            <p>{storageData.bucketUsage.toFixed(2)} / {storageData.bucketCapacity} GB</p>
+
+            <p><strong>Block Storage (Volumes):</strong></p>
+            <div className="progress-bar">
+              <div 
+                className="progress-fill progress-volume" 
+                style={{ width: `${(storageData.volumeUsage / storageData.volumeCapacity) * 100}%` }}>
+              </div>
+            </div>
+            <p>{storageData.volumeUsage.toFixed(2)} / {storageData.volumeCapacity} GB</p>
           </CardContent>
         </Card>
       </div>

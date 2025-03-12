@@ -23,10 +23,10 @@ const BucketsPage = () => {
   if (!buckets.length) return <div>Loading data...</div>;
 
   const renderIcon = (fileName) => {
-    if (fileName.endsWith('.csv')) return <FileText size={16} />;
-    if (fileName.endsWith('.mp3')) return <Music size={16} />;
-    if (fileName.endsWith('.mp4')) return <Film size={16} />;
-    if (fileName.endsWith('.sql')) return <Database size={16} />;
+    if (fileName.endsWith('.csv')) return <FileText size={18} />;
+    if (fileName.endsWith('.mp3')) return <Music size={18} />;
+    if (fileName.endsWith('.mp4')) return <Film size={18} />;
+    if (fileName.endsWith('.sql')) return <Database size={18} />;
     return <FileText size={16} />;
   };
 
@@ -41,6 +41,12 @@ const BucketsPage = () => {
               <p><strong>Created At:</strong> {new Date(bucket.created_at).toLocaleString()}</p>
               <p><strong>Max Capacity:</strong> {bucket.max_capacity_gb} GB</p>
               <p><strong>Current Usage:</strong> {bucket.current_usage_gb.toFixed(2)} GB ({bucket.percentage_used.toFixed(1)}%)</p>
+              <div className="progress-bar">
+                <div 
+                  className={`progress-fill ${bucket.percentage_used < 50 ? 'progress-healthy' : 'progress-high'}`} 
+                  style={{ width: `${bucket.percentage_used}%` }}
+                ></div>
+              </div>
               <Badge variant="outline" className={bucket.percentage_used < 50 ? 'status-low' : 'status-high'}>
                 {bucket.percentage_used < 50 ? 'Healthy' : 'High Usage'}
               </Badge>
@@ -63,4 +69,3 @@ const BucketsPage = () => {
 };
 
 export default BucketsPage;
-

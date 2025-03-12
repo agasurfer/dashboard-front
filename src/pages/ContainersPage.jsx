@@ -22,10 +22,17 @@ const ContainersPage = () => {
   if (error) return <div className="error-message">{error}</div>;
   if (!containers.length) return <div>Loading data...</div>;
 
-  const energyData = containers.map(container => ({
+
+  const energyData = containers.map(container => {
+  const service = container.footprintId.services.find(
+    (service) => service.serviceId === container._id
+  );
+
+  return {
     name: container.name,
-    energy: container.footprintId.total_energy_consumed_kWh,
-  }));
+    energy: service ? service.energy_consumed_kWh : 0,
+  };
+});
 
   return (
     <div className="containers-page">
